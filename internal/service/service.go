@@ -8,7 +8,7 @@ import (
 )
 
 type Service struct {
-	Repository *repository.Repo // composition
+	Repository repository.Repository
 }
 
 func (svc Service) AddData(user dto.AddRequest) {

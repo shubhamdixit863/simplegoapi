@@ -1,31 +1,48 @@
 package main
 
 import (
+	"context"
+	"fmt"
 	"github.com/gorilla/mux"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"net/http"
-	"simplegoapi/internal/entity"
 	"simplegoapi/internal/handlers"
 	"simplegoapi/internal/repository"
 	"simplegoapi/internal/service"
 )
 
+func Mongoconnect(uri string) *mongo.Database {
+
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Connected with mongodb")
+	return client.Database("mong_tute")
+}
+
 func main() {
 
 	r := mux.NewRouter()
 
+	mongodb := Mongoconnect("mongodb://localhost:27017")
+
 	// db object
 	// in memory db object
 	//mp := make(map[string]string)
-	mp := []entity.User{}
+	//mp := []entity.User{}
 
-	// Repository object
-
-	repo := repository.Repo{Data: mp}
+	// Repository objects
+	// inmemory repo
+	//repo := repository.Repo{Data: mp}
+	// mongodb repo
+	mongodRepo := repository.MongoRepo{Db: mongodb}
 
 	// Service object
 
-	svc := service.Service{Repository: &repo}
+	svc := service.Service{Repository: &mongodRepo}
 
 	// handler object
 
