@@ -58,8 +58,19 @@ func (svc Service) UpdateData(user dto.AddRequest) {
 	svc.Repository.UpdateData(userEntity)
 }
 
-func (svc Service) DeleteData(name string) {
+func (svc Service) DeleteData(id string) {
 
-	svc.Repository.DeleteData(name)
+	svc.Repository.DeleteData(id)
+
+}
+
+func (svc Service) GetSingleData(id string) dto.AddRequest {
+
+	d := svc.Repository.GetSingleData(id)
+
+	return dto.AddRequest{
+		Name: d.Name,
+		Age:  d.Age,
+	}
 
 }

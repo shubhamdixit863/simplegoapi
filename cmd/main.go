@@ -51,8 +51,9 @@ func main() {
 	r.HandleFunc("/", hn.HomeHandler)
 	r.HandleFunc("/user", hn.AddData).Methods("POST")
 	r.HandleFunc("/user", hn.GetData).Methods("GET")
+	r.HandleFunc("/user/{id}", hn.GetSingleData).Methods("GET")
 	r.HandleFunc("/user", hn.UpdateData).Methods("PUT")
-	r.HandleFunc("/user/{name}", hn.DeleteData).Methods("DELETE")
+	r.HandleFunc("/user/{id}", hn.DeleteData).Methods("DELETE")
 
 	log.Fatalln(http.ListenAndServe(":8080", r))
 

@@ -70,8 +70,26 @@ func (hn Handler) UpdateData(w http.ResponseWriter, r *http.Request) {
 
 func (hn Handler) DeleteData(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	name := vars["name"]
-	hn.Svc.DeleteData(name)
+	id := vars["id"]
+	hn.Svc.DeleteData(id)
 
 	fmt.Fprintf(w, "User Deleted")
+}
+
+func (hn Handler) GetSingleData(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	dataFromService := hn.Svc.GetSingleData(id)
+
+	// We have to marshal it into a json string
+
+	marshal, err := json.Marshal(dataFromService)
+	if err != nil {
+		fmt.Fprintf(w, "Error in marshalling")
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	fmt.Fprintf(w, string(marshal))
 }

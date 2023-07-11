@@ -7,4 +7,5 @@ type Repository interface {
 	GetData() []entity.User
 	UpdateData(user entity.User) entity.User
 	DeleteData(name string) entity.User
+	GetSingleData(id string) entity.User
 }
