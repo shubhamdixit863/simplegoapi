@@ -6,7 +6,7 @@ type AddRequest struct {
 }
 
 type UserResponseDto struct {
-	Id   int    `json:"id"`
+	Id   string `json:"id"`
 	Name string `json:"name"`
 	Age  int    `json:"age"`
 }
