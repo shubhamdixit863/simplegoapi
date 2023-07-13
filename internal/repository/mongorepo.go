@@ -32,6 +32,7 @@ func (repo *MongoRepo) GetData() []entity.User {
 
 	var slc []entity.User
 
+	//filter := bson.D{{"name", "ram"}}
 	filter := bson.D{}
 	find, err := repo.Db.Collection("user").Find(context.Background(), filter)
 	if err != nil {
@@ -59,7 +60,27 @@ func (repo *MongoRepo) GetData() []entity.User {
 
 }
 
-func (repo *MongoRepo) UpdateData(user entity.User) entity.User {
+func (repo *MongoRepo) UpdateData(user entity.User, id string) entity.User {
+
+	objectId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return entity.User{}
+	}
+
+	// bson.M is for unstructured data ,used as map
+	//filter := bson.M{"name": bson.M{"$regex": user.Name, "$options": "i"}}  // regex search is supported by mongodb ,i,,g global search
+	// bson.D is a combination of slices
+	//options := options.Update().SetUpsert(true) // upsert means update if available otheriwse insert
+	update := bson.D{{"$set", bson.D{
+
+		{"name", user.Name},
+		{"age", user.Age},
+	}}}
+	filter := bson.D{{"_id", objectId}}
+	_, err = repo.Db.Collection("user").UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		return entity.User{}
+	}
 
 	return user
 

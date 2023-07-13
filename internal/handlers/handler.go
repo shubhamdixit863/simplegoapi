@@ -57,13 +57,15 @@ func (hn Handler) GetData(w http.ResponseWriter, r *http.Request) {
 
 func (hn Handler) UpdateData(w http.ResponseWriter, r *http.Request) {
 
+	vars := mux.Vars(r)
+	id := vars["id"]
 	var user dto.AddRequest
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
 		fmt.Fprintf(w, "Please send proper data")
 	}
 
-	hn.Svc.UpdateData(user)
+	hn.Svc.UpdateData(user, id)
 
 	fmt.Fprintf(w, "User Updated")
 }
