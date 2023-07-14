@@ -2,11 +2,11 @@ package repository
 
 import (
 	"fmt"
-	"simplegoapi/internal/entity"
+	"simplegoapi/internal/entity/mongodb"
 )
 
 type Repo struct {
-	Data []entity.User
+	Data []mongodb.User
 }
 
 // We have two different kind of methods
@@ -15,17 +15,17 @@ type Repo struct {
 
 // Value receiver method
 
-func (repo *Repo) AddData(user entity.User) {
+func (repo *Repo) AddData(user mongodb.User) {
 	repo.Data = append(repo.Data, user)
 
 }
 
-func (repo *Repo) GetData() []entity.User {
+func (repo *Repo) GetData() []mongodb.User {
 
 	return repo.Data
 }
 
-func (repo *Repo) UpdateData(user entity.User) entity.User {
+func (repo *Repo) UpdateData(user mongodb.User) mongodb.User {
 
 	// for updation -->
 	for i := 0; i < len(repo.Data); i++ {
@@ -39,10 +39,10 @@ func (repo *Repo) UpdateData(user entity.User) entity.User {
 		}
 
 	}
-	return entity.User{}
+	return mongodb.User{}
 }
 
-func (repo *Repo) DeleteData(name string) entity.User {
+func (repo *Repo) DeleteData(name string) mongodb.User {
 
 	for i := 0; i < len(repo.Data); i++ {
 
@@ -54,10 +54,10 @@ func (repo *Repo) DeleteData(name string) entity.User {
 			//	fmt.Println(repo.Data[:i])
 			repo.Data = append(repo.Data[:i], repo.Data[i+1:]...)
 
-			return entity.User{}
+			return mongodb.User{}
 
 		}
 
 	}
-	return entity.User{}
+	return mongodb.User{}
 }

@@ -6,7 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"simplegoapi/internal/entity"
+	"simplegoapi/internal/entity/mongodb"
 )
 
 // Will hold the all the operations of mongodb
@@ -15,7 +15,7 @@ type MongoRepo struct {
 	Db *mongo.Database
 }
 
-func (repo *MongoRepo) AddData(user entity.User) {
+func (repo *MongoRepo) AddData(user mongodb.User) {
 
 	fmt.Println(user)
 
@@ -28,9 +28,9 @@ func (repo *MongoRepo) AddData(user entity.User) {
 
 // It will get all records
 
-func (repo *MongoRepo) GetData() []entity.User {
+func (repo *MongoRepo) GetData() []mongodb.User {
 
-	var slc []entity.User
+	var slc []mongodb.User
 
 	//filter := bson.D{{"name", "ram"}}
 	filter := bson.D{}
@@ -44,7 +44,7 @@ func (repo *MongoRepo) GetData() []entity.User {
 	// find.Next will keep returning the boolean value until we have the data in our find
 	// or until we consume all the records
 	for find.Next(context.TODO()) {
-		d := entity.User{}
+		d := mongodb.User{}
 		err := find.Decode(&d)
 		if err != nil {
 			return nil
@@ -60,11 +60,11 @@ func (repo *MongoRepo) GetData() []entity.User {
 
 }
 
-func (repo *MongoRepo) UpdateData(user entity.User, id string) entity.User {
+func (repo *MongoRepo) UpdateData(user mongodb.User, id string) mongodb.User {
 
 	objectId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return entity.User{}
+		return mongodb.User{}
 	}
 
 	// bson.M is for unstructured data ,used as map
@@ -79,33 +79,33 @@ func (repo *MongoRepo) UpdateData(user entity.User, id string) entity.User {
 	filter := bson.D{{"_id", objectId}}
 	_, err = repo.Db.Collection("user").UpdateOne(context.Background(), filter, update)
 	if err != nil {
-		return entity.User{}
+		return mongodb.User{}
 	}
 
 	return user
 
 }
 
-func (repo *MongoRepo) DeleteData(id string) entity.User {
+func (repo *MongoRepo) DeleteData(id string) mongodb.User {
 
 	objectId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return entity.User{}
+		return mongodb.User{}
 	}
 	filter := bson.D{{"_id", objectId}}
 	repo.Db.Collection("user").DeleteOne(context.Background(), filter)
-	return entity.User{}
+	return mongodb.User{}
 
 }
 
-func (repo *MongoRepo) GetSingleData(id string) entity.User {
+func (repo *MongoRepo) GetSingleData(id string) mongodb.User {
 
 	// OF getting single data from the db
 
-	d := entity.User{}
+	d := mongodb.User{}
 	objectId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return entity.User{}
+		return mongodb.User{}
 	}
 	filter := bson.D{{"_id", objectId}}
 
@@ -113,7 +113,7 @@ func (repo *MongoRepo) GetSingleData(id string) entity.User {
 
 	fmt.Println(d)
 	if err != nil {
-		return entity.User{}
+		return mongodb.User{}
 	}
 
 	return d

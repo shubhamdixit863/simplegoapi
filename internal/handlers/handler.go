@@ -37,7 +37,11 @@ func (hn Handler) AddData(w http.ResponseWriter, r *http.Request) {
 
 func (hn Handler) GetData(w http.ResponseWriter, r *http.Request) {
 
-	users := hn.Svc.GetData()
+	users, err := hn.Svc.GetData()
+
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+	}
 	//fmt.Println(users)
 
 	// Two ways go provides to convert a struct into a json string
@@ -65,7 +69,12 @@ func (hn Handler) UpdateData(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Please send proper data")
 	}
 
-	hn.Svc.UpdateData(user, id)
+	err = hn.Svc.UpdateData(user, id)
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+
+		return
+	}
 
 	fmt.Fprintf(w, "User Updated")
 }
@@ -73,7 +82,12 @@ func (hn Handler) UpdateData(w http.ResponseWriter, r *http.Request) {
 func (hn Handler) DeleteData(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
-	hn.Svc.DeleteData(id)
+	err := hn.Svc.DeleteData(id)
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+
+		return
+	}
 
 	fmt.Fprintf(w, "User Deleted")
 }
@@ -81,7 +95,11 @@ func (hn Handler) DeleteData(w http.ResponseWriter, r *http.Request) {
 func (hn Handler) GetSingleData(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
-	dataFromService := hn.Svc.GetSingleData(id)
+	dataFromService, err := hn.Svc.GetSingleData(id)
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+
+	}
 
 	// We have to marshal it into a json string
 

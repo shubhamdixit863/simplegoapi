@@ -1,4 +1,4 @@
-package entity
+package mongodb
 
 type User struct {
 	Id   string `bson:"_id,omitempty" gorm:"primaryKey,omitempty"` // omit empty says to db that ignore the zero value of string and create the id from your own end

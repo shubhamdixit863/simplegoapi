@@ -3,34 +3,38 @@ package service
 import (
 	"fmt"
 	"simplegoapi/internal/dto"
-	"simplegoapi/internal/entity"
+	"simplegoapi/internal/entity/mysql"
 	"simplegoapi/internal/repository"
 	"strings"
 )
 
 type Service struct {
-	Repository repository.Repository
+	Repository repository.RelationalDbRepository
 }
 
-func (svc Service) AddData(user dto.AddRequest) {
+func (svc Service) AddData(user dto.AddRequest) error {
 
 	// We will do some operation on our repository
 
-	userEntity := entity.User{
+	userEntity := mysql.User{
 		Name: user.Name,
 		Age:  user.Age,
 	}
 
 	fmt.Println(userEntity)
 
-	svc.Repository.AddData(userEntity)
+	return svc.Repository.AddData(userEntity)
 
 }
 
-func (svc Service) GetData() []dto.UserResponseDto {
+func (svc Service) GetData() ([]dto.UserResponseDto, error) {
 
 	users := []dto.UserResponseDto{}
-	entityUser := svc.Repository.GetData()
+	entityUser, err := svc.Repository.GetData()
+
+	if err != nil {
+		return nil, err
+	}
 	for _, value := range entityUser {
 
 		fmt.Println(value)
@@ -44,35 +48,47 @@ func (svc Service) GetData() []dto.UserResponseDto {
 
 	}
 
-	return users
+	return users, nil
 
 }
 
-func (svc Service) UpdateData(user dto.AddRequest, id string) {
+func (svc Service) UpdateData(user dto.AddRequest, id string) error {
 
-	userEntity := entity.User{
+	userEntity := mysql.User{
 		Name: user.Name,
 		Age:  user.Age,
 	}
 
 	// We will call our repo method to update the record
 
-	svc.Repository.UpdateData(userEntity, id)
+	_, err := svc.Repository.UpdateData(userEntity, id)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-func (svc Service) DeleteData(id string) {
+func (svc Service) DeleteData(id string) error {
 
-	svc.Repository.DeleteData(id)
+	_, err := svc.Repository.DeleteData(id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 
 }
 
-func (svc Service) GetSingleData(id string) dto.AddRequest {
+func (svc Service) GetSingleData(id string) (dto.AddRequest, error) {
 
-	d := svc.Repository.GetSingleData(id)
+	d, err := svc.Repository.GetSingleData(id)
+	if err != nil {
+		return dto.AddRequest{}, err
+	}
 
 	return dto.AddRequest{
 		Name: d.Name,
 		Age:  d.Age,
-	}
+	}, nil
 
 }

@@ -1,11 +1,13 @@
 package repository
 
-import "simplegoapi/internal/entity"
+import (
+	"simplegoapi/internal/entity/mongodb"
+)
 
 type Repository interface {
-	AddData(user entity.User)
-	GetData() []entity.User
-	UpdateData(user entity.User, id string) entity.User
-	DeleteData(name string) entity.User
-	GetSingleData(id string) entity.User
+	AddData(user mongodb.User)
+	GetData() []mongodb.User
+	UpdateData(user mongodb.User, id string) mongodb.User
+	DeleteData(name string) mongodb.User
+	GetSingleData(id string) mongodb.User
 }
