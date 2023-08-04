@@ -8,6 +8,14 @@ import (
 	"strings"
 )
 
+type IService interface {
+	AddData(user dto.AddRequest) error
+	GetData() ([]dto.UserResponseDto, error)
+	UpdateData(user dto.AddRequest, id string) error
+	GetSingleData(id string) (dto.AddRequest, error)
+	DeleteData(id string) error
+}
+
 type Service struct {
 	Repository repository.RelationalDbRepository
 }

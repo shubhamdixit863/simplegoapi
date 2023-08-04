@@ -69,7 +69,7 @@ func main() {
 
 	hn := handlers.Handler{Svc: svc}
 
-	r.HandleFunc("/", hn.HomeHandler)
+	//r.HandleFunc("/", hn.HomeHandler)
 	r.HandleFunc("/user", hn.AddData).Methods("POST")
 	r.HandleFunc("/user", hn.GetData).Methods("GET")
 	r.HandleFunc("/user/{id}", hn.GetSingleData).Methods("GET")

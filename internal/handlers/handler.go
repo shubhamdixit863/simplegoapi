@@ -10,12 +10,13 @@ import (
 )
 
 type Handler struct {
-	Svc service.Service
+	Svc service.IService
 }
 
-func (hn Handler) HomeHandler(w http.ResponseWriter, r *http.Request) {
-
-	// We can send response from here ----
+func NewHandler(Svc service.IService) Handler {
+	return Handler{
+		Svc: Svc,
+	}
 
 }
 
@@ -29,7 +30,7 @@ func (hn Handler) AddData(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Please send proper data")
 	}
 
-	hn.Svc.AddData(user)
+	hn.Svc.AddData(user) // We can mock this behaviour ---->
 
 	fmt.Fprintf(w, "Request Received")
 
